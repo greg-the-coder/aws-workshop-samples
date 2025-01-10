@@ -172,7 +172,7 @@ resource "aws_ec2_instance_state" "dev" {
 }
 
 module "windows_dcv" {
-  source               = "./windows-dcv/"
+  source               = "registry.coder.com/modules/amazon-dcv-windows/coder"
   count                = data.coder_workspace.me.start_count
   agent_id             = try(coder_agent.dev[count.index].id, "")
   add_client_coder_app = true
