@@ -8,12 +8,6 @@ terraform {
     }
   }
 }
-module "dcv" {
-  count    = data.coder_workspace.me.start_count
-  source   = "registry.coder.com/modules/amazon-dcv-windows/coder"
-  version  = "1.0.24"
-  agent_id = resource.coder_agent.main.id
-}
 # Last updated 2023-03-14
 # aws ec2 describe-regions | jq -r '[.Regions[].RegionName] | sort'
 data "coder_parameter" "region" {
@@ -23,34 +17,24 @@ data "coder_parameter" "region" {
   default      = "us-east-1"
   mutable      = false
   option {
-    name  = "Asia Pacific (Tokyo)"
-    value = "ap-northeast-1"
-    icon  = "/emojis/1f1ef-1f1f5.png"
+    name  = "US East (N. Virginia)"
+    value = "us-east-1"
+    icon  = "/emojis/1f1fa-1f1f8.png"
   }
   option {
-    name  = "Asia Pacific (Seoul)"
-    value = "ap-northeast-2"
-    icon  = "/emojis/1f1f0-1f1f7.png"
+    name  = "US East (Ohio)"
+    value = "us-east-2"
+    icon  = "/emojis/1f1fa-1f1f8.png"
   }
   option {
-    name  = "Asia Pacific (Osaka-Local)"
-    value = "ap-northeast-3"
-    icon  = "/emojis/1f1f0-1f1f7.png"
+    name  = "US West (N. California)"
+    value = "us-west-1"
+    icon  = "/emojis/1f1fa-1f1f8.png"
   }
   option {
-    name  = "Asia Pacific (Mumbai)"
-    value = "ap-south-1"
-    icon  = "/emojis/1f1f0-1f1f7.png"
-  }
-  option {
-    name  = "Asia Pacific (Singapore)"
-    value = "ap-southeast-1"
-    icon  = "/emojis/1f1f0-1f1f7.png"
-  }
-  option {
-    name  = "Asia Pacific (Sydney)"
-    value = "ap-southeast-2"
-    icon  = "/emojis/1f1f0-1f1f7.png"
+    name  = "US West (Oregon)"
+    value = "us-west-2"
+    icon  = "/emojis/1f1fa-1f1f8.png"
   }
   option {
     name  = "Canada (Central)"
@@ -86,26 +70,6 @@ data "coder_parameter" "region" {
     name  = "South America (São Paulo)"
     value = "sa-east-1"
     icon  = "/emojis/1f1e7-1f1f7.png"
-  }
-  option {
-    name  = "US East (N. Virginia)"
-    value = "us-east-1"
-    icon  = "/emojis/1f1fa-1f1f8.png"
-  }
-  option {
-    name  = "US East (Ohio)"
-    value = "us-east-2"
-    icon  = "/emojis/1f1fa-1f1f8.png"
-  }
-  option {
-    name  = "US West (N. California)"
-    value = "us-west-1"
-    icon  = "/emojis/1f1fa-1f1f8.png"
-  }
-  option {
-    name  = "US West (Oregon)"
-    value = "us-west-2"
-    icon  = "/emojis/1f1fa-1f1f8.png"
   }
 }
 
@@ -159,31 +123,29 @@ data "aws_ami" "windows" {
   }
 }
 
-resource "coder_agent" "main" {
-  arch = "amd64"
-  auth = "aws-instance-identity"
-  os   = "windows"
+resource "coder_agent" "dev" {
+  count = data.coder_workspace.me.start_count
+  arch  = "amd64"
+  auth  = "aws-instance-identity"
+  os    = "windows"
 }
 
 locals {
-
   # User data is used to stop/start AWS instances. See:
   # https://github.com/hashicorp/terraform-provider-aws/issues/22
-
   user_data_start = <<EOT
 <powershell>
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
-${coder_agent.main.init_script}
+${try(coder_agent.dev[0].init_script, "")}
 </powershell>
 <persist>true</persist>
 EOT
-
-  user_data_end = <<EOT
-<powershell>
-shutdown /s
-</powershell>
-<persist>true</persist>
-EOT
+  #   user_data_end   = <<EOT
+  # <powershell>
+  # shutdown /s
+  # </powershell>
+  # EOT
+  user_data_end = ""
 }
 
 resource "aws_instance" "dev" {
@@ -198,12 +160,28 @@ resource "aws_instance" "dev" {
     Coder_Provisioned = "true"
   }
   lifecycle {
-    ignore_changes = [ami]
+    ignore_changes = [
+      ami,
+      user_data
+    ]
   }
 }
+resource "aws_ec2_instance_state" "dev" {
+  instance_id = aws_instance.dev.id
+  state       = data.coder_workspace.me.transition == "start" ? "running" : "stopped"
+}
+
+module "windows_dcv" {
+  source               = "./windows-dcv/"
+  count                = data.coder_workspace.me.start_count
+  agent_id             = try(coder_agent.dev[count.index].id, "")
+  add_client_coder_app = true
+  subdomain            = false
+}
+
 resource "coder_metadata" "workspace_info" {
   count       = data.coder_workspace.me.start_count
-  resource_id = aws_instance.dev.id # id of the instance resource
+  resource_id = aws_instance.dev.id
   item {
     key   = "region"
     value = data.coder_parameter.region.value
@@ -218,15 +196,15 @@ resource "coder_metadata" "workspace_info" {
   }
   item {
     key   = "DCV client instructions"
-    value = "Run `coder port-forward ${data.coder_workspace.me.name} -p ${module.dcv[count.index].port}` and connect to **localhost:${module.dcv[count.index].port}${module.dcv[count.index].web_url_path}**"
+    value = "Run `coder port-forward ${data.coder_workspace.me.name} -p ${module.windows_dcv[count.index].port}` and connect to **localhost:${module.windows_dcv[count.index].port}${module.windows_dcv[count.index].web_url_path}**"
   }
   item {
     key   = "username"
-    value = module.dcv[count.index].username
+    value = module.windows_dcv[count.index].username
   }
   item {
     key       = "password"
-    value     = module.dcv[count.index].password
+    value     = module.windows_dcv[count.index].password
     sensitive = true
   }
 }
