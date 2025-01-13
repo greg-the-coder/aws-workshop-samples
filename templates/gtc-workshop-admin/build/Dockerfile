@@ -5,6 +5,7 @@ RUN apt-get update \
 	curl \
 	git \
 	golang \
+	nodejs npm \
 	sudo \
 	unzip \
 	vim \
@@ -24,6 +25,9 @@ RUN sudo apt-get update && sudo apt-get install -y gnupg software-properties-com
 #Install AWS CLI
 RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
     && unzip awscliv2.zip && sudo ./aws/install
+
+#Install AWS CDK
+RUN sudo npm install -g aws-cdk && cdk --version
 
 ARG USER=coder
 RUN useradd --groups sudo --no-create-home --shell /bin/bash ${USER} \
