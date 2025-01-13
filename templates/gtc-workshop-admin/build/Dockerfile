@@ -6,6 +6,7 @@ RUN apt-get update \
 	git \
 	golang \
 	sudo \
+	unzip \
 	vim \
 	wget \
 	&& rm -rf /var/lib/apt/lists/*
@@ -20,7 +21,9 @@ RUN sudo apt-get update && sudo apt-get install -y gnupg software-properties-com
     sudo tee /etc/apt/sources.list.d/hashicorp.list \
 	&& sudo apt update && sudo apt-get install terraform
 
-
+#Install AWS CLI
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip && sudo ./aws/install
 
 ARG USER=coder
 RUN useradd --groups sudo --no-create-home --shell /bin/bash ${USER} \
