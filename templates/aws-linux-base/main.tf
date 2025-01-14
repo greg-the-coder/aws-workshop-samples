@@ -16,7 +16,6 @@ data "aws_iam_instance_profile" "vm_instance_profile" {
   name  = "gtc-demo-aws-workshop-access"
 }
 
-# Last updated 2023-03-14
 # aws ec2 describe-regions | jq -r '[.Regions[].RegionName] | sort'
 data "coder_parameter" "region" {
   name         = "region"
