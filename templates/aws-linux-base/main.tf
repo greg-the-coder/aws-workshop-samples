@@ -11,6 +11,7 @@ terraform {
 provider "aws" {
   region = data.coder_parameter.region.value
 }
+#### Update to Workshop IAM Instance Profile
 data "aws_iam_instance_profile" "vm_instance_profile" {
   name  = "gtc-demo-aws-workshop-access"
 }
