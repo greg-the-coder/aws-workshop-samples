@@ -110,11 +110,21 @@ resource "coder_agent" "dev" {
     curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server --version 4.11.0
     /tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
 
-    # install AWS CLI & CDK
-    sudo yum update -y && sudo yum install -y git nodejs npm unzip 
+    # install AWS CLI
+    sudo yum update -q -y && sudo yum install -q -y git nodejs npm unzip 
     curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" \
-    && unzip awscliv2.zip && sudo ./aws/install
+    && unzip -q awscliv2.zip && sudo ./aws/install && aws --version
+    rm awscliv2.zip && rm -rf aws
+    # install AWS CDK
     sudo npm install -g aws-cdk && cdk --version
+    # install AWS SAM
+    if [ ! -d "sam-installation" ]; then
+       sudo yum install -q -y python3 python3-pip docker
+       wget -q https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-arm64.zip
+       mkdir sam-installation && unzip -q aws-sam-cli-linux-arm64.zip -d sam-installation /
+       && sudo ./sam-installation/install && sam --version && rm aws-sam-cli-linux-arm64.zip
+    fi
+    
   EOT
   
   metadata {
