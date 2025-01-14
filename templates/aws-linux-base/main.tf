@@ -121,8 +121,8 @@ resource "coder_agent" "dev" {
     if [ ! -d "sam-installation" ]; then
        sudo yum install -q -y python3 python3-pip docker
        wget -q https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-arm64.zip
-       mkdir sam-installation && unzip -q aws-sam-cli-linux-arm64.zip -d sam-installation /
-       && sudo ./sam-installation/install && sam --version && rm aws-sam-cli-linux-arm64.zip
+       mkdir sam-installation && unzip -q aws-sam-cli-linux-arm64.zip -d sam-installation
+       sudo ./sam-installation/install && sam --version && rm aws-sam-cli-linux-arm64.zip
     fi
     
   EOT
@@ -238,4 +238,6 @@ resource "coder_metadata" "workspace_info" {
 resource "aws_ec2_instance_state" "dev" {
   instance_id = aws_instance.dev.id
   state       = data.coder_workspace.me.transition == "start" ? "running" : "stopped"
+}
+d"
 }
