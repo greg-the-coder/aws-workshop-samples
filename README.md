@@ -1,1 +1,2 @@
 # aws-workshop-samples
+This project is currently underdevelopment, but meant to aid anyone that needs to quickly spin up Cloud Development Environments for Demos, Labs, Workshops, Hackathons, or simple POC's in AWS using [Coder](https://coder.com/cde).  These templates and basic Coder admin scripts can be used in any Coder deployment, but are focused on using the [Coder AWS Marketplace](https://coder.com/docs/install/cloud/ec2) AWS EC2 single VM deployment to get started quickly.
