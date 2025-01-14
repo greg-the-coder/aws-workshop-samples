@@ -15,7 +15,6 @@ provider "aws" {
 data "aws_iam_instance_profile" "vm_instance_profile" {
   name  = "gtc-demo-aws-workshop-access"
 }
-# data.aws_secretsmanager_secret_version.aws-creds.id.secret_string
 
 # Last updated 2023-03-14
 # aws ec2 describe-regions | jq -r '[.Regions[].RegionName] | sort'
