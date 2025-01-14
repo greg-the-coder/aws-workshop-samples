@@ -109,6 +109,12 @@ resource "coder_agent" "dev" {
     # install and start code-server
     curl -fsSL https://code-server.dev/install.sh | sh -s -- --method=standalone --prefix=/tmp/code-server --version 4.11.0
     /tmp/code-server/bin/code-server --auth none --port 13337 >/tmp/code-server.log 2>&1 &
+
+    # install AWS CLI & CDK
+    sudo yum update -y && sudo yum install -y git nodejs npm unzip 
+    curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "awscliv2.zip" \
+    && unzip awscliv2.zip && sudo ./aws/install
+    sudo npm install -g aws-cdk && cdk --version
   EOT
   
   metadata {
