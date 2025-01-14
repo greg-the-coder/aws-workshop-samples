@@ -3,4 +3,5 @@ This project is currently underdevelopment, but meant to aid anyone that needs t
 
 1) Follow the steps in the [AWS EC2 Installation Guide](https://coder.com/docs/install/cloud/ec2). Complete the optional step to provide Developers EC2 Workspaces, as the AWS Specific templates provided rely on this capability.  Login using the provided pubic IP, and setup your first Coder user.
 2) After successfully logging in, clone this Github repo locally so that the provided AWS Workshop Admin template can be uploaded.
-[Under Development - Detailed Instructions for completing Setup]
+
+**[Under Development - Detailed Instructions for completing Setup]
