@@ -239,5 +239,4 @@ resource "aws_ec2_instance_state" "dev" {
   instance_id = aws_instance.dev.id
   state       = data.coder_workspace.me.transition == "start" ? "running" : "stopped"
 }
-d"
-}
+
