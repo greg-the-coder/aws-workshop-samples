@@ -135,6 +135,13 @@ resource "coder_agent" "main" {
   }
 }
 
+module "coder-login" {
+  count    = data.coder_workspace.me.start_count
+  source   = "registry.coder.com/modules/coder-login/coder"
+  version  = "1.0.15"
+  agent_id = coder_agent.main.id
+}
+
 resource "coder_app" "code-server" {
   agent_id     = coder_agent.main.id
   slug         = "code-server"
