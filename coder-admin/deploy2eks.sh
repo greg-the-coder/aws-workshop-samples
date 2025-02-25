@@ -23,15 +23,24 @@ EOF
 # Create Coder Namespace and Deploy In-Cluster PostgreSQL - https://coder.com/docs/install/kubernetes
 kubectl create namespace coder
 
-# Install Coder using Helm and supplied values.yaml base
+# Install Coder using Helm and supplied coder-core-values-v2.yaml base (replace coder_access_url values with your own)
 helm install coder coder-v2/coder \
     --namespace coder \
     --values coder-core-values.yaml \
     --version 2.19.0
+
+# Create IAM Role & Trust Relationship for EC2 Workspace Support (change rolename with your own)
+aws iam create-role --role-name gtc-coder-ec2-workspace-eks-role --assume-role-policy-document file://ekspodid-trust-policy.json
+aws iam attach-role-policy \
+    --role-name gtc-coder-ec2-workspace-eks-role \
+    --policy-arn arn:aws:iam::aws:policy/AmazonEC2FullAccess
+aws iam attach-role-policy \
+    --role-name gtc-coder-ec2-workspace-eks-role \
+    --policy-arn arn:aws:iam::aws:policy/IAMReadOnlyAccess
 
 # Add and IAM Pod Identify association for EC2 Workspace support:
 aws eks create-pod-identity-association \
     --cluster-name gtc-test-podid-eks \
     --namespace coder \
     --service-account coder \
-    --role-arn arn:aws:iam::816024705881:role/gtc-coder-ec2-workspace-ekspodid
+    --role-arn arn:aws:iam::816024705881:role/gtc-coder-ec2-workspace-eks-role
