@@ -4,7 +4,7 @@
 # Create EKS Cluster using default eksctl generated supporting resources, and leverage auto-mode features for simplicity (change cluster name to your own)
 eksctl create cluster --name=gtc-test-podid-eks --enable-auto-mode --region us-east-2
 
-# Depploy new K8S StorageClass for dynamic EBS volume provisioning
+# Deploy new K8S StorageClass for dynamic EBS volume provisioning
 kubectl apply -f - <<EOF
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -19,7 +19,8 @@ parameters:
   encrypted: "true"
 allowVolumeExpansion: true
 EOF
-# Smoke test cluster/app deployment - https://docs.aws.amazon.com/eks/latest/userguide/auto-elb-example.html
+
+# Smoke test cluster/app deployment (if desired) - https://docs.aws.amazon.com/eks/latest/userguide/auto-elb-example.html
 
 # Create Coder Namespace and Deploy In-Cluster PostgreSQL - https://coder.com/docs/install/kubernetes
 kubectl create namespace coder
