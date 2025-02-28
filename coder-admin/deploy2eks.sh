@@ -67,3 +67,4 @@ aws eks create-pod-identity-association \
     --role-arn arn:aws:iam::<aws account>:role/gtc-coder-ec2-workspace-eks-role
 
 # TODO:  Need to add step to create Cloudfront distribution in front of K8S Loadbalancer to support easy https/SSL connection to workspaces + code-server 
+# Current test CF Endpoint - https://d1wpz86e557hjj.cloudfront.net/

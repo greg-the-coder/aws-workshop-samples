@@ -11,7 +11,7 @@ coder:
   - name: CODER_WILDCARD_ACCESS_URL
     value: "*.a93acca9b94ef42578c06f113341ae95-8f14f6f24a7cea15.elb.us-east-2.amazonaws.com"
 #  - name: CODER_HTTP_ADDRESS
-#    value: "0.0.0.0:80"
+#    value: "127.0.0.1:80"
 #  - name: CODER_TLS_ADDRESS
 #    value: "0.0.0.0:443"
   - name: CODER_PG_CONNECTION_URL
@@ -23,6 +23,10 @@ coder:
     value: "false"      
   - name: CODER_SWAGGER_ENABLE
     value: "true"
+  - name: CODER_TLS_REDIRECT_HTTP_TO_HTTPS
+    value: "false"
+  - name: CODER_TLS_ENABLE
+    value: "false"
   - name: CODER_REDIRECT_TO_ACCESS_URL
     value: "false"
   
