@@ -7,9 +7,13 @@ coder:
   # for information about what environment variables can be set.
   env:
   - name: CODER_ACCESS_URL
-    value: "http://a93acca9b94ef42578c06f113341ae95-8f14f6f24a7cea15.elb.us-east-2.amazonaws.com/"
+    value: "https://d1wpz86e557hjj.cloudfront.net/"
   - name: CODER_WILDCARD_ACCESS_URL
-    value: "*.a93acca9b94ef42578c06f113341ae95-8f14f6f24a7cea15.elb.us-east-2.amazonaws.com"
+    value: "*.d1wpz86e557hjj.cloudfront.net"
+#  - name: CODER_ACCESS_URL
+#    value: "http://a93acca9b94ef42578c06f113341ae95-8f14f6f24a7cea15.elb.us-east-2.amazonaws.com/"
+#  - name: CODER_WILDCARD_ACCESS_URL
+#    value: "*.a93acca9b94ef42578c06f113341ae95-8f14f6f24a7cea15.elb.us-east-2.amazonaws.com"
 #  - name: CODER_HTTP_ADDRESS
 #    value: "127.0.0.1:80"
 #  - name: CODER_TLS_ADDRESS
