@@ -122,31 +122,19 @@ data "coder_parameter" "instance_type" {
   name         = "instance_type"
   display_name = "Instance type"
   description  = "What instance type should your workspace use?"
-  default      = "t3.large"
+  default      = "m5a.large"
   mutable      = false
   option {
-    name  = "2 vCPU, 1 GiB RAM"
-    value = "t3.micro"
-  }
-  option {
-    name  = "2 vCPU, 2 GiB RAM"
-    value = "t3.small"
-  }
-  option {
-    name  = "2 vCPU, 4 GiB RAM"
-    value = "t3.medium"
-  }
-  option {
     name  = "2 vCPU, 8 GiB RAM"
-    value = "t3.large"
+    value = "m5a.large"
   }
   option {
     name  = "4 vCPU, 16 GiB RAM"
-    value = "t3.xlarge"
+    value = "m5dn.xlarge"
   }
   option {
     name  = "8 vCPU, 32 GiB RAM"
-    value = "t3.2xlarge"
+    value = "m5dn.2xlarge"
   }
 }
 
@@ -222,10 +210,11 @@ resource "aws_ec2_instance_state" "dev" {
 }
 
 module "dcv" {
+  source   = "registry.coder.com/modules/amazon-dcv-windows/coder"
+  version  = "1.0.24"
   count      = data.coder_workspace.me.start_count
-  source     = "github.com/coder/modules//amazon-dcv-windows?ref=main"
   agent_id   = resource.coder_agent.dev[count.index].id
-  subdomain  = true
+  subdomain  = false
 }
 
 module "vscode-on-ws" {
@@ -254,6 +243,15 @@ resource "coder_metadata" "workspace_info" {
     value = "Run `coder port-forward ${data.coder_workspace.me.name} -p ${module.dcv[count.index].port}` and connect to **localhost:${module.dcv[count.index].port}${module.dcv[count.index].web_url_path}**"
   }
   item {
+    key   = "username"
+    value = module.dcv[count.index].username
+  }
+  item {
+    key       = "password"
+    value     = module.dcv[count.index].password
+    sensitive = true
+  }
+} {
     key   = "username"
     value = module.dcv[count.index].username
   }
