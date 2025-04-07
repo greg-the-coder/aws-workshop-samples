@@ -251,13 +251,4 @@ resource "coder_metadata" "workspace_info" {
     value     = module.dcv[count.index].password
     sensitive = true
   }
-} {
-    key   = "username"
-    value = module.dcv[count.index].username
-  }
-  item {
-    key       = "password"
-    value     = module.dcv[count.index].password
-    sensitive = true
-  }
 }

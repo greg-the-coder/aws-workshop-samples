@@ -124,6 +124,13 @@ resource "coder_agent" "dev" {
        sudo ./sam-installation/install && sam --version && rm aws-sam-cli-linux-arm64.zip
     fi
     
+    # install Amazon Q Developer CLI
+    curl --proto '=https' --tlsv1.2 -sSf https://desktop-release.q.us-east-1.amazonaws.com/latest/amazon-q.appimage -o amazon-q.appimage
+    chmod +x amazon-q.appimage
+    sudo dnf install fuse2
+    # verify q cli install
+    q doctor
+
   EOT
   
   metadata {
