@@ -7,9 +7,9 @@ coder:
   # for information about what environment variables can be set.
   env:
   - name: CODER_ACCESS_URL
-    value: "https://d1wpz86e557hjj.cloudfront.net/"
+    value: "https://partner.demo.coder.com/"
   - name: CODER_WILDCARD_ACCESS_URL
-    value: "*.d1wpz86e557hjj.cloudfront.net"
+    value: "*.partner.demo.coder.com"
 #  - name: CODER_ACCESS_URL
 #    value: "http://a93acca9b94ef42578c06f113341ae95-8f14f6f24a7cea15.elb.us-east-2.amazonaws.com/"
 #  - name: CODER_WILDCARD_ACCESS_URL
@@ -88,7 +88,7 @@ coder:
   
   # Internal Provisioner
   - name: CODER_PROVISIONER_DAEMONS
-    value: "2"
+    value: "3"
   - name: CODER_VERBOSE
     value: "false"
   - name: CODER_DERP_SERVER_ENABLE
