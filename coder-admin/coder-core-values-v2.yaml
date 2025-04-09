@@ -27,16 +27,14 @@ coder:
     value: "false"      
   - name: CODER_SWAGGER_ENABLE
     value: "true"
-  - name: CODER_TLS_REDIRECT_HTTP_TO_HTTPS
+  - name: CODER_REDIRECT_TO_ACCESS_URL
     value: "false"
   - name: CODER_TLS_ENABLE
-    value: "false"
-  - name: CODER_REDIRECT_TO_ACCESS_URL
     value: "false"
   
   # OIDC/SSO configuration
   - name: CODER_OIDC_ISSUER_URL
-    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_lsXthgPxX/oauth2/authorize
+    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_lsXthgPxX
   - name: CODER_OIDC_EMAIL_DOMAIN
     value: coder.com
   - name: CODER_OIDC_CLIENT_ID
@@ -89,7 +87,7 @@ coder:
   # Internal Provisioner
   - name: CODER_PROVISIONER_DAEMONS
     value: "3"
-  - name: CODER_VERBOSE
+  - name: CODER_LOG_FILTER
     value: "false"
   - name: CODER_DERP_SERVER_ENABLE
     value: "true"
