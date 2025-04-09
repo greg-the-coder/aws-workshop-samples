@@ -58,6 +58,14 @@ aws cognito-idp create-user-pool-client \
   --callback-urls "https://partner.demo.coder.com/api/v2/users/oidc/callback" \
   --logout-urls "https://partner.demo.coder.com/api/v2/users/oidc/logout"
 
+#Create CODER_OIDC_CLIENT_ID secret used Coder Deployment
+kubectl create secret generic aws-cognito-id -n coder \
+  --from-literal=client-id="50laisd95vk7akn539huhmoo5m"
+
+#Create CODER_OIDC_CLIENT_SECRET secret used Coder Deployment
+kubectl create secret generic aws-cognito-secret -n coder \
+  --from-literal=client-secret="<client secret"
+  
 # Perform helm upgrade to update Coder with actual K8S Service endpoints created for use with CODER_ACCESS_URL and CODER_WILDCARD_ACCESS_URL after updating coder-core-values-v2.yaml
 helm upgrade coder coder-v2/coder \
     --namespace coder \
