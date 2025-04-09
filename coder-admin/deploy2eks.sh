@@ -43,6 +43,20 @@ helm install coder coder-v2/coder \
     --namespace coder \
     --values coder-core-values-v2.yaml \
     --version 2.19.0
+# Create Cognito User Pool as OIDC Auth Provider
+aws cognito-idp create-user-pool \
+  --pool-name gtc-partnerdemo-user-pool \
+  --auto-verified-attributes email
+
+# Create Coder OIDC App Client
+aws cognito-idp create-user-pool-client \
+  --user-pool-id us-east-2_lsXthgPxX \
+  --client-name gtc-partnerdemo-coder-client \
+  --generate-secret \
+  --allowed-o-auth-flows code implicit \
+  --allowed-o-auth-scopes openid email profile \
+  --callback-urls "https://partner.demo.coder.com/api/v2/users/oidc/callback" \
+  --logout-urls "https://partner.demo.coder.com/api/v2/users/oidc/logout"
 
 # Perform helm upgrade to update Coder with actual K8S Service endpoints created for use with CODER_ACCESS_URL and CODER_WILDCARD_ACCESS_URL after updating coder-core-values-v2.yaml
 helm upgrade coder coder-v2/coder \
