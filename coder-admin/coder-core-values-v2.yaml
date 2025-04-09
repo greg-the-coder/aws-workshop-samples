@@ -35,26 +35,26 @@ coder:
     value: "false"
   
   # OIDC/SSO configuration
-  #- name: CODER_OIDC_ISSUER_URL
-  #  value: https://login.microsoftonline.com/110f0c0f-cd76-4717-a6f8-4eea3d0f8109/v2.0
-  #- name: CODER_OIDC_EMAIL_DOMAIN
-  #  value: accountscoder.onmicrosoft.com,coder.com
-  #- name: CODER_OIDC_CLIENT_ID
-  #  valueFrom:
-  #    secretKeyRef:
-  #      key: client-id
-  #      name: azure-ad-secret
-  #- name: CODER_OIDC_CLIENT_SECRET
-  #  valueFrom:
-  #    secretKeyRef:
-  #      key: client-secret
-  #      name: azure-ad-secret
-  #- name: CODER_OIDC_SCOPES
-  #  value: openid,profile,email
-  #- name: CODER_OIDC_SIGN_IN_TEXT
-  #  value: Microsoft Entra ID
-  #- name: CODER_OIDC_ICON_URL
-  #  value: /icon/azure.png
+  - name: CODER_OIDC_ISSUER_URL
+    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_lsXthgPxX
+  - name: CODER_OIDC_EMAIL_DOMAIN
+    value: coder.com
+  - name: CODER_OIDC_CLIENT_ID
+    valueFrom:
+      secretKeyRef:
+        key: client-id
+        name: aws-cognito-id
+  - name: CODER_OIDC_CLIENT_SECRET
+    valueFrom:
+      secretKeyRef:
+        key: client-secret
+        name: aws-cognito-secret
+  - name: CODER_OIDC_SCOPES
+    value: openid,profile,email
+  - name: CODER_OIDC_SIGN_IN_TEXT
+    value: AWS Cognito
+  - name: CODER_OIDC_ICON_URL
+    value: /icon/aws.png
 
   # External Authentication - Github
   #- name: CODER_EXTERNAL_AUTH_0_ID
