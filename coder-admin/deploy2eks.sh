@@ -60,7 +60,7 @@ aws cognito-idp create-user-pool-client \
 
 #Create CODER_OIDC_CLIENT_ID secret used Coder Deployment
 kubectl create secret generic aws-cognito-id -n coder \
-  --from-literal=client-id="50laisd95vk7akn539huhmoo5m"
+  --from-literal=client-id="gm13p0bgncehgg6um2pakf4vr"
 
 #Create CODER_OIDC_CLIENT_SECRET secret used Coder Deployment
 kubectl create secret generic aws-cognito-secret -n coder \
