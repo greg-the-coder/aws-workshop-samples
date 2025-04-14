@@ -34,7 +34,7 @@ coder:
   
   # OIDC/SSO configuration
   - name: CODER_OIDC_ISSUER_URL
-    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_lsXthgPxX
+    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_s9fe76zlB
   - name: CODER_OIDC_EMAIL_DOMAIN
     value: coder.com,gmail.com
   - name: CODER_OIDC_CLIENT_ID
