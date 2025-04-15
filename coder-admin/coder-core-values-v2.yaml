@@ -48,7 +48,7 @@ coder:
         key: client-secret
         name: aws-cognito-secret
   - name: CODER_OIDC_SCOPES
-    value: openid,profile,email
+    value: openid,profile,email,detail
   - name: CODER_OIDC_SIGN_IN_TEXT
     value: AWS Cognito
   - name: CODER_OIDC_ICON_URL
