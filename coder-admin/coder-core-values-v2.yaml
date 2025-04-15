@@ -34,7 +34,7 @@ coder:
   
   # OIDC/SSO configuration
   - name: CODER_OIDC_ISSUER_URL
-    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_s9fe76zlB
+    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_lsXthgPxX
   - name: CODER_OIDC_EMAIL_DOMAIN
     value: coder.com,gmail.com
   - name: CODER_OIDC_CLIENT_ID
@@ -48,7 +48,7 @@ coder:
         key: client-secret
         name: aws-cognito-secret
   - name: CODER_OIDC_SCOPES
-    value: openid,profile,email,detail
+    value: openid,profile,email
   - name: CODER_OIDC_SIGN_IN_TEXT
     value: AWS Cognito
   - name: CODER_OIDC_ICON_URL
