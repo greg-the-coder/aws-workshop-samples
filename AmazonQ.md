@@ -1,35 +1,34 @@
-# aws-workshop-samples
-This project is designed to help you quickly spin up Cloud Development Environments for Demos, Labs, Workshops, Hackathons, or simple POC's in AWS using [Coder](https://coder.com/cde). These templates and basic Coder admin scripts can be used in any Coder deployment, but are focused on using either the [Coder AWS Marketplace](https://coder.com/docs/install/cloud/ec2) AWS EC2 single VM deployment or an AWS EKS deployment.
+# Deploying Coder on AWS EKS with Amazon Q
 
-## Deployment Options
+This document provides a step-by-step guide for deploying Coder on AWS EKS for workshops or demonstrations, based on the `deploy2eks.sh` script in this repository.
 
-### Option 1: AWS EC2 Single VM Deployment
+## Prerequisites
 
-1) Follow the steps in the [AWS EC2 Installation Guide](https://coder.com/docs/install/cloud/ec2). Complete the optional step to provide Developers EC2 Workspaces, as the AWS Specific templates provided rely on this capability.
-2) Login using the provided public IP, and setup your first Coder user.
-3) After successfully logging in, clone this Github repo locally so that the provided AWS Workshop Admin template can be uploaded.
+Before you begin, ensure you have:
 
-### Option 2: AWS EKS Deployment
-
-This guide walks you through deploying Coder on AWS EKS for workshops or demonstrations.
-
-#### Prerequisites
-- AWS Account with appropriate permissions
-- Latest versions of the following CLI tools installed:
-  - AWS CLI
+- An AWS account with appropriate permissions
+- The following CLI tools installed:
+  - AWS CLI (configured with your credentials)
   - eksctl
   - kubectl
   - helm
 
-#### Step 1: Create an EKS Cluster
+## Deployment Steps
+
+### 1. Create an EKS Cluster
+
 ```bash
-# Create EKS Cluster (customize the cluster name and region as needed)
+# Create an EKS cluster with auto-mode enabled for simplicity
 eksctl create cluster --name=your-cluster-name --enable-auto-mode --region your-region
 ```
 
-#### Step 2: Configure Storage for the Cluster
+Replace `your-cluster-name` with your desired cluster name and `your-region` with your preferred AWS region.
+
+### 2. Configure Storage for the Cluster
+
+Deploy a Kubernetes StorageClass for dynamic EBS volume provisioning:
+
 ```bash
-# Deploy a K8S StorageClass for dynamic EBS volume provisioning
 kubectl apply -f - <<EOF
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
@@ -46,7 +45,8 @@ allowVolumeExpansion: true
 EOF
 ```
 
-#### Step 3: Set Up Coder with PostgreSQL Database
+### 3. Set Up Coder with PostgreSQL Database
+
 ```bash
 # Create Coder namespace
 kubectl create namespace coder
@@ -65,7 +65,8 @@ kubectl create secret generic coder-db-url -n coder \
   --from-literal=url="postgres://coder:coder@coder-db-postgresql.coder.svc.cluster.local:5432/coder?sslmode=disable"
 ```
 
-#### Step 4: Install Coder
+### 4. Install Coder
+
 ```bash
 # Add Coder Helm repository
 helm repo add coder-v2 https://helm.coder.com/v2
@@ -78,7 +79,8 @@ helm install coder coder-v2/coder \
     --version 2.19.0
 ```
 
-#### Step 5: Set Up Authentication with AWS Cognito (Optional)
+### 5. Set Up Authentication with AWS Cognito (Optional)
+
 ```bash
 # Create Cognito User Pool
 aws cognito-idp create-user-pool \
@@ -97,8 +99,6 @@ aws cognito-idp create-user-pool-client \
   --callback-urls "https://your-coder-domain.com/api/v2/users/oidc/callback" \
   --logout-urls "https://your-coder-domain.com/api/v2/users/oidc/logout"
 
-# Note the Client ID and Client Secret from the output
-
 # Create Kubernetes secrets for Cognito credentials
 kubectl create secret generic aws-cognito-id -n coder \
   --from-literal=client-id="your-client-id"
@@ -107,22 +107,26 @@ kubectl create secret generic aws-cognito-secret -n coder \
   --from-literal=client-secret="your-client-secret"
 ```
 
-#### Step 6: Update Coder Configuration
-```bash
-# Update the coder-core-values-v2.yaml file with your specific configuration:
-# - Update CODER_ACCESS_URL with your actual domain or load balancer URL
-# - Update CODER_WILDCARD_ACCESS_URL with your wildcard domain
-# - Update CODER_OIDC_ISSUER_URL with your Cognito User Pool URL
-# - Update any other settings as needed
+### 6. Update Coder Configuration
 
-# Apply the updated configuration
+Before updating Coder, modify the `coder-core-values-v2.yaml` file with your specific configuration:
+
+- Update `CODER_ACCESS_URL` with your actual domain or load balancer URL
+- Update `CODER_WILDCARD_ACCESS_URL` with your wildcard domain
+- Update `CODER_OIDC_ISSUER_URL` with your Cognito User Pool URL
+- Update any other settings as needed
+
+Then apply the updated configuration:
+
+```bash
 helm upgrade coder coder-v2/coder \
     --namespace coder \
     --values coder-core-values-v2.yaml \
     --version 2.19.0
 ```
 
-#### Step 7: Configure IAM for EC2 Workspace Support
+### 7. Configure IAM for EC2 Workspace Support
+
 ```bash
 # Create IAM Role & Trust Relationship for EC2 Workspace Support
 # First, make sure you have the ekspodid-trust-policy.json file in your current directory
@@ -145,16 +149,18 @@ aws eks create-pod-identity-association \
     --role-arn arn:aws:iam::your-aws-account-id:role/your-coder-ec2-workspace-role
 ```
 
-#### Step 8: Access Your Coder Deployment
-After completing the setup, you can access your Coder deployment using the Load Balancer URL provided by the Kubernetes service. For production use, it's recommended to:
+### 8. Set Up CloudFront for HTTPS Access (Recommended)
 
-1. Set up a CloudFront distribution in front of the Kubernetes Load Balancer to support HTTPS/SSL connections
+For production use, it's recommended to:
+
+1. Set up a CloudFront distribution in front of the Kubernetes Load Balancer
 2. Configure a custom domain name pointing to your CloudFront distribution
 3. Update the Coder configuration with your custom domain
 
-## Additional Configuration
+## Customizing Your Deployment
 
-### Customizing the Coder Deployment
+### The coder-core-values-v2.yaml File
+
 The `coder-core-values-v2.yaml` file contains various configuration options for your Coder deployment, including:
 
 - Access URLs and wildcard domains
@@ -165,5 +171,33 @@ The `coder-core-values-v2.yaml` file contains various configuration options for 
 
 Review and modify this file to match your specific requirements before deploying or upgrading Coder.
 
-### Template Management
-After deploying Coder, you can use the templates provided in this repository to create standardized development environments for your workshops or demonstrations.
+### Trust Policy for EKS Pod Identity
+
+The `ekspodid-trust-policy.json` file contains the IAM trust relationship that allows EKS pods to assume the IAM role for EC2 workspace provisioning:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowEksAuthToAssumeRoleForPodIdentity",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "pods.eks.amazonaws.com"
+            },
+            "Action": [
+                "sts:AssumeRole",
+                "sts:TagSession"
+            ]
+        }
+    ]
+}
+```
+
+## Next Steps
+
+After deploying Coder, you can:
+
+1. Upload and configure templates from this repository
+2. Create standardized development environments for your workshops or demonstrations
+3. Invite users to your Coder instance
