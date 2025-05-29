@@ -78,36 +78,7 @@ helm install coder coder-v2/coder \
     --version 2.19.0
 ```
 
-#### Step 5: Set Up Authentication with AWS Cognito (Optional)
-```bash
-# Create Cognito User Pool
-aws cognito-idp create-user-pool \
-  --pool-name your-user-pool-name \
-  --auto-verified-attributes email
-
-# Note the User Pool ID from the output for use in the next command
-
-# Create Coder OIDC App Client
-aws cognito-idp create-user-pool-client \
-  --user-pool-id your-user-pool-id \
-  --client-name your-client-name \
-  --generate-secret \
-  --allowed-o-auth-flows code implicit \
-  --allowed-o-auth-scopes openid email profile \
-  --callback-urls "https://your-coder-domain.com/api/v2/users/oidc/callback" \
-  --logout-urls "https://your-coder-domain.com/api/v2/users/oidc/logout"
-
-# Note the Client ID and Client Secret from the output
-
-# Create Kubernetes secrets for Cognito credentials
-kubectl create secret generic aws-cognito-id -n coder \
-  --from-literal=client-id="your-client-id"
-
-kubectl create secret generic aws-cognito-secret -n coder \
-  --from-literal=client-secret="your-client-secret"
-```
-
-#### Step 6: Update Coder Configuration
+#### Step 5: Update Coder Configuration
 ```bash
 # Update the coder-core-values-v2.yaml file with your specific configuration:
 # - Update CODER_ACCESS_URL with your actual domain or load balancer URL
@@ -122,7 +93,7 @@ helm upgrade coder coder-v2/coder \
     --version 2.19.0
 ```
 
-#### Step 7: Configure IAM for EC2 Workspace Support
+#### Step 6: Configure IAM for EC2 Workspace Support
 ```bash
 # Create IAM Role & Trust Relationship for EC2 Workspace Support
 # First, make sure you have the ekspodid-trust-policy.json file in your current directory
@@ -145,7 +116,7 @@ aws eks create-pod-identity-association \
     --role-arn arn:aws:iam::your-aws-account-id:role/your-coder-ec2-workspace-role
 ```
 
-#### Step 8: Access Your Coder Deployment
+#### Step 7: Access Your Coder Deployment
 After completing the setup, you can access your Coder deployment using the Load Balancer URL provided by the Kubernetes service. For production use, it's recommended to:
 
 1. Set up a CloudFront distribution in front of the Kubernetes Load Balancer to support HTTPS/SSL connections

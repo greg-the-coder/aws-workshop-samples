@@ -6,14 +6,10 @@ coder:
   # to configure all aspects of `coder server`. Please see `coder server --help`
   # for information about what environment variables can be set.
   env:
-  - name: CODER_ACCESS_URL
-    value: "https://partner.demo.coder.com/"
-  - name: CODER_WILDCARD_ACCESS_URL
-    value: "*.partner.demo.coder.com"
 #  - name: CODER_ACCESS_URL
-#    value: "http://a93acca9b94ef42578c06f113341ae95-8f14f6f24a7cea15.elb.us-east-2.amazonaws.com/"
+#    value: "https://partner.demo.coder.com/"
 #  - name: CODER_WILDCARD_ACCESS_URL
-#    value: "*.a93acca9b94ef42578c06f113341ae95-8f14f6f24a7cea15.elb.us-east-2.amazonaws.com"
+#    value: "*.partner.demo.coder.com"
 #  - name: CODER_HTTP_ADDRESS
 #    value: "127.0.0.1:80"
 #  - name: CODER_TLS_ADDRESS
@@ -33,26 +29,26 @@ coder:
     value: "false"
   
   # OIDC/SSO configuration
-  - name: CODER_OIDC_ISSUER_URL
-    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_lsXthgPxX
-  - name: CODER_OIDC_EMAIL_DOMAIN
-    value: coder.com,gmail.com
-  - name: CODER_OIDC_CLIENT_ID
-    valueFrom:
-      secretKeyRef:
-        key: client-id
-        name: aws-cognito-id
-  - name: CODER_OIDC_CLIENT_SECRET
-    valueFrom:
-      secretKeyRef:
-        key: client-secret
-        name: aws-cognito-secret
-  - name: CODER_OIDC_SCOPES
-    value: openid,profile,email
-  - name: CODER_OIDC_SIGN_IN_TEXT
-    value: AWS Cognito
-  - name: CODER_OIDC_ICON_URL
-    value: /icon/aws.png
+#  - name: CODER_OIDC_ISSUER_URL
+#    value: https://cognito-idp.us-east-2.amazonaws.com/us-east-2_lsXthgPxX
+#  - name: CODER_OIDC_EMAIL_DOMAIN
+#    value: coder.com,gmail.com
+#  - name: CODER_OIDC_CLIENT_ID
+#    valueFrom:
+#      secretKeyRef:
+#        key: client-id
+#        name: aws-cognito-id
+#  - name: CODER_OIDC_CLIENT_SECRET
+#    valueFrom:
+#      secretKeyRef:
+#        key: client-secret
+#        name: aws-cognito-secret
+#  - name: CODER_OIDC_SCOPES
+#    value: openid,profile,email
+#  - name: CODER_OIDC_SIGN_IN_TEXT
+#    value: AWS Cognito
+#  - name: CODER_OIDC_ICON_URL
+#    value: /icon/aws.png
 
   # External Authentication - Github
   #- name: CODER_EXTERNAL_AUTH_0_ID
@@ -140,7 +136,7 @@ coder:
     externalTrafficPolicy: Local
     annotations:   
       service.beta.kubernetes.io/aws-load-balancer-type: nlb
-      service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "Environment=demo,Name=gtc-test-podid-nlb"
+      service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "Environment=demo,Name=coder-cntrlpln-nlb"
       service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip   
     externalTrafficPolicy: Local
     sessionAffinity: None
