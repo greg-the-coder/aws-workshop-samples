@@ -137,4 +137,4 @@ The `coder-core-values-v2.yaml` file in the [coder-admin](./coder-admin) directo
 Review and modify this file to match your specific requirements before deploying or upgrading Coder.
 
 ### Template Management
-After deploying Coder, you can use the templates provided in this repository to create standardized development environments for your workshops or demonstrations.
+After accessing your Coder Deployment and setting up your Coder Admin account, tryout the [GitOps Demo](https://github.com/greg-the-coder/partner-demo-gitops) to review the different Coder CDE capabiities and test out a basic GitOps template management flow.
