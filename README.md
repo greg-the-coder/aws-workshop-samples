@@ -66,6 +66,7 @@ kubectl create secret generic coder-db-url -n coder \
 ```
 
 #### Step 4: Install Coder
+Find the latest stable release from the [Coder Releases Page](https://github.com/coder/coder/releases)
 ```bash
 # Add Coder Helm repository
 helm repo add coder-v2 https://helm.coder.com/v2
@@ -75,7 +76,7 @@ helm repo add coder-v2 https://helm.coder.com/v2
 helm install coder coder-v2/coder \
     --namespace coder \
     --values coder-core-values-v2.yaml \
-    --version 2.19.0
+    --version <Latest Stable Release>
 ```
 
 #### Step 5: Update Coder Configuration
