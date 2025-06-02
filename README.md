@@ -126,7 +126,7 @@ After completing the setup, you can access your Coder deployment using the Load 
 ## Additional Configuration
 
 ### Customizing the Coder Deployment
-The `coder-core-values-v2.yaml` file contains various configuration options for your Coder deployment, including:
+The `coder-core-values-v2.yaml` file in the [coder_admin](./coder_admin) directory contains various configuration options for your Coder deployment, including:
 
 - Access URLs and wildcard domains
 - Authentication settings (password, OIDC)
