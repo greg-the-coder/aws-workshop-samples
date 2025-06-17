@@ -1,0 +1,70 @@
+coder:
+  env:
+    # Replace these values with your actual domain
+    CODER_ACCESS_URL: "https://workshop.example.com"
+    CODER_WILDCARD_ACCESS_URL: "*.workshop.example.com"
+    # OIDC Configuration for AWS Cognito
+    CODER_OIDC_ISSUER_URL: "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_xxxxxxxx"
+    CODER_OIDC_CLIENT_ID:
+      valueFrom:
+        secretKeyRef:
+          name: aws-cognito-id
+          key: client-id
+    CODER_OIDC_CLIENT_SECRET:
+      valueFrom:
+        secretKeyRef:
+          name: aws-cognito-secret
+          key: client-secret
+    CODER_OIDC_EMAIL_DOMAIN: "*"
+    CODER_OIDC_SCOPES: "openid profile email"
+    CODER_OIDC_ALLOW_SIGNUPS: "true"
+    # Database configuration
+    CODER_PG_CONNECTION_URL:
+      valueFrom:
+        secretKeyRef:
+          name: coder-db-url
+          key: url
+    # Security settings
+    CODER_TLS_ENABLE: "false"  # We'll use CloudFront for TLS termination
+    CODER_SECURE_AUTH_COOKIE: "true"
+    # Workspace settings
+    CODER_DEFAULT_COMPUTE_PROVISIONER: "kubernetes"
+    CODER_EXPERIMENTS: "kubernetes-workspace-templates"
+    # Telemetry
+    CODER_TELEMETRY_ENABLE: "false"
+
+# Kubernetes service configuration
+service:
+  type: LoadBalancer
+  port: 80
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: nlb
+    service.beta.kubernetes.io/aws-load-balancer-cross-zone-load-balancing-enabled: "true"
+
+# Resource requests and limits
+resources:
+  requests:
+    cpu: 250m
+    memory: 512Mi
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+
+# Pod security context
+securityContext:
+  runAsNonRoot: true
+  runAsUser: 1000
+  runAsGroup: 1000
+
+# Service account configuration
+serviceAccount:
+  create: true
+  name: coder
+  annotations:
+    eks.amazonaws.com/role-arn: "arn:aws:iam::ACCOUNT_ID:role/coder-ec2-workspace-role"
+
+# Persistence configuration
+persistence:
+  enabled: true
+  size: 10Gi
+  storageClassName: gp3-csi
