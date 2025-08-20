@@ -6,10 +6,10 @@ coder:
   # to configure all aspects of `coder server`. Please see `coder server --help`
   # for information about what environment variables can be set.
   env:
-#  - name: CODER_ACCESS_URL
-#    value: "https://partner.demo.coder.com/"
-#  - name: CODER_WILDCARD_ACCESS_URL
-#    value: "*.partner.demo.coder.com"
+  - name: CODER_ACCESS_URL
+    value: "https://example.coder.com/"
+  - name: CODER_WILDCARD_ACCESS_URL
+    value: "*.example.coder.com"
 #  - name: CODER_HTTP_ADDRESS
 #    value: "127.0.0.1:80"
 #  - name: CODER_TLS_ADDRESS
