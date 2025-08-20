@@ -104,7 +104,7 @@ coder:
   #  prometheus.io/scrape: "true"
   
   # Enable HA for Coderd
-  replicaCount: 2
+  replicaCount: 1
 
   resources:
     limits:
