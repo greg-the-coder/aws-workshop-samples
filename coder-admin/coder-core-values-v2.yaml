@@ -7,9 +7,9 @@ coder:
   # for information about what environment variables can be set.
   env:
   - name: CODER_ACCESS_URL
-    value: "https://example.coder.com/"
+    value: "https://coder.example.com/"
   - name: CODER_WILDCARD_ACCESS_URL
-    value: "*.example.coder.com"
+    value: "*.coder.example.com"
 #  - name: CODER_HTTP_ADDRESS
 #    value: "127.0.0.1:80"
 #  - name: CODER_TLS_ADDRESS
