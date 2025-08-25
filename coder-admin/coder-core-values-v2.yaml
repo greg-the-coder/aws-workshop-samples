@@ -129,7 +129,6 @@ coder:
  
   # Service object to expose for Coder
   service:
-    annotations:
     enable: true
     type: LoadBalancer
     sessionAffinity: None
@@ -139,8 +138,6 @@ coder:
       service.beta.kubernetes.io/aws-load-balancer-additional-resource-tags: "Environment=demo,Name=coder-cntrlpln-nlb"
       service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip   
       service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
-    externalTrafficPolicy: Local
-    sessionAffinity: None
   
   # Service account configuration - cannot be diabled
   serviceAccount:
