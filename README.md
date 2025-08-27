@@ -91,7 +91,7 @@ helm install coder coder-v2/coder \
 helm upgrade coder coder-v2/coder \
     --namespace coder \
     --values coder-core-values-v2.yaml \
-    --version 2.19.0
+    --version <Latest Stable Release>
 ```
 
 #### Step 6: Configure IAM for EC2 Workspace Support
